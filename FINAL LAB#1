@@ -1,0 +1,570 @@
+
+EXCERCISE 1
+
+package com.mainactivity
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.mainactivity.ui.theme.MainActivityTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            MainActivityTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    Greeting(
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }}}}}
+
+ @Composable
+fun Greeting(modifier: Modifier = Modifier) {
+    Text(
+        text = "Welcome to Android UI",
+        modifier = modifier
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    MainActivityTheme {
+        Greeting()
+    }}
+
+
+
+
+
+EXERCISE 2
+
+package com.mainactivity
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp 
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+        YourAppTheme {
+        ResponsiveFormLayout()
+            
+}}}}
+       
+@OptIn(ExperimentalMaterial3Api::class)
+
+@Composable
+fun ResponsiveFormLayout() {
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Responsive Form") }) }
+    ) { paddingValues ->
+
+                Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues) 
+                .padding(horizontal = 24.dp, vertical = 32.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp) 
+        ) {
+
+
+                Text(
+                text = "Username:",
+                fontSize = 18.sp )
+
+            
+            TextField(
+                value = "",
+                onValueChange = { },
+                label = { Text("Enter your username") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+                Text(
+                text = "Password:",
+                fontSize = 18.sp )
+            
+
+            TextField(
+                value = "",
+                onValueChange = { },
+                label = { Text("Enter your password") },
+                modifier = Modifier.fillMaxWidth()
+            )
+        }}}
+    
+@Composable
+fun YourAppTheme(content: @Composable () -> Unit) {
+    MaterialTheme(content = content)
+}
+
+@Preview(name = "1. Phone Preview", device = "id:pixel_5")
+@Composable
+fun PhoneLayoutPreview() {
+    YourAppTheme {
+        ResponsiveFormLayout()
+    }}
+
+
+@Preview(name = "2. Tablet Preview", device = "id:pixel_c")
+@Composable
+fun TabletLayoutPreview() {
+    YourAppTheme {
+        ResponsiveFormLayout()
+    }}
+
+
+
+
+
+EXCERCISE 3
+package com.mainactivity
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            YourAppTheme {
+                TextControlsScreen()
+            }}}}
+       
+@OptIn(ExperimentalMaterial3Api::class)
+
+@Composable
+fun TextControlsScreen() {
+        var userInput by remember { mutableStateOf("") }
+
+      val countries = listOf("USA", "Canada", "Mexico", "Germany", "Japan", "Brazil", "India")
+    var selectedCountry by remember { mutableStateOf(countries.first()) }
+    var isExpanded by remember { mutableStateOf(false) }
+
+       val spinnerOptions = listOf("Option 1", "Option 2", "Option 3", "Option 4", "Option 5")
+    var selectedOption by remember { mutableStateOf(spinnerOptions.first()) }
+    var isMenuVisible by remember { mutableStateOf(false) }
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+                Text(
+                text = "Please enter your details and make selections below:",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+                TextField(
+                value = userInput,
+                onValueChange = { userInput = it },
+                label = { Text("General User Input") },
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            )
+
+          
+            Text(text = "Select Country:", modifier = Modifier.padding(bottom = 4.dp))
+            ExposedDropdownMenuBox(
+                expanded = isExpanded,
+                onExpandedChange = { isExpanded = !isExpanded },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+            ) {
+                               TextField(
+                    readOnly = true,
+                    value = selectedCountry,
+                    onValueChange = {},
+                    label = { Text("Country") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
+                    },
+                    modifier = Modifier
+                        .menuAnchor() 
+                        .fillMaxWidth()
+                )
+
+                    ExposedDropdownMenu(
+                    expanded = isExpanded,
+                    onDismissRequest = { isExpanded = false }
+                ) {
+                    countries.forEach { selectionOption ->
+                        DropdownMenuItem(
+                            text = { Text(selectionOption) },
+                            onClick = {
+                                selectedCountry = selectionOption
+                                isExpanded = false
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                        )
+                    }}}
+                
+           
+            Text(text = "Select an Option:", modifier = Modifier.padding(bottom = 4.dp))
+            Box(
+                modifier = Modifier.wrapContentSize(Alignment.TopStart)
+            ) {
+                    Button(onClick = { isMenuVisible = true }) {
+                    Text(selectedOption)
+                }
+
+                    DropdownMenu(
+                    expanded = isMenuVisible,
+                    onDismissRequest = { isMenuVisible = false }
+                ) {
+                    spinnerOptions.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(option) },
+                            onClick = {
+                                selectedOption = option
+                                isMenuVisible = false
+                            }
+                        )
+                    }}}}}}
+           
+
+@Composable
+fun YourAppTheme(content: @Composable () -> Unit) {
+    MaterialTheme(content = content)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TextControlsPreview() {
+    YourAppTheme {
+        TextControlsScreen()
+    }}
+
+
+EXCERCISE 4
+
+package com.mainactivity
+
+import android.os.Bundle
+import android.widget.Toast 
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons 
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext 
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            YourAppTheme {
+                ButtonControlsScreen() 
+            }}}}
+      
+
+@Composable
+fun YourAppTheme(content: @Composable () -> Unit) {
+    MaterialTheme(content = content)
+}
+
+@Composable
+fun ButtonControlsScreen() {
+    
+    val context = LocalContext.current
+
+    )
+    var isToggled by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Text(
+            text = "Button Control Demo",
+            style = MaterialTheme.typography.headlineMedium
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+            onClick = {
+               
+                Toast.makeText(context, "Standard Button Pressed!", Toast.LENGTH_SHORT).show()
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Standard Button")
+        }
+
+       
+        Button(
+            onClick = {
+            Toast.makeText(context, "Image Button Clicked!", Toast.LENGTH_SHORT).show()
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            
+            Icon(
+                imageVector = Icons.Filled.Star,
+                contentDescription = "Star Icon",
+                modifier = Modifier.size(24.dp).padding(end = 8.dp)
+            )
+            Text("Image Button Action")
+        }
+
+        
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text("Toggle Switch: ${if (isToggled) "ON" else "OFF"}")
+
+            Switch(
+                checked = isToggled,
+                onCheckedChange = { newState ->
+                    
+                    isToggled = newState
+
+                    val message = if (newState) "Toggle is now ON" else "Toggle is now OFF"
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }
+            )
+        }}}
+   
+@Preview(showBackground = true)
+@Composable
+fun ButtonControlsPreview() {
+    YourAppTheme {
+        ButtonControlsScreen()
+    }}
+
+
+
+
+EXERCISE 5
+
+package com.mainactivity
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+
+
+// For this exercise, we'll assume we have 'ic_launcher_foreground' for R.drawable.image_one and 'ic_launcher_background' for R.drawable.image_two.
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            YourAppTheme {
+                ImageControlScreen()
+            }}}}
+        
+@Composable
+fun ImageControlScreen() {
+
+    
+    val imageList = listOf(R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_background)
+    var currentImageIndex by remember { mutableIntStateOf(0) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceAround
+    ) {
+
+                Text(
+            text = "Static Image (ImageView Equivalent)",
+            style = MaterialTheme.typography.titleMedium
+        )
+        Image(
+            
+            painter = painterResource(id = R.drawable.ic_launcher_foreground),
+            contentDescription = "A static image",
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .size(150.dp)
+                .padding(bottom = 32.dp)
+        )
+        Text(
+            text = "Dynamic Image (ImageSwitcher Equivalent)",
+            style = MaterialTheme.typography.titleMedium
+        )
+        Image(
+            painter = painterResource(id = imageList[currentImageIndex]),
+            contentDescription = "A dynamic image that changes",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(200.dp)
+                .padding(16.dp)
+        )
+
+
+        Button(
+            onClick = {
+
+                currentImageIndex = (currentImageIndex + 1) % imageList.size
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Switch Image (Current Index: $currentImageIndex)")
+        }}}
+    
+
+@Composable
+fun YourAppTheme(content: @Composable () -> Unit) {
+    MaterialTheme(content = content)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ImageControlPreview() {
+    YourAppTheme {
+        ImageControlScreen()
+    }}
+
+
+
+
+EXERCISE 6
+
+package com.mainactivity
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            YourAppTheme {
+                OptimizedLoginForm()
+            }}}}
+        
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun OptimizedLoginForm() {
+    Scaffold(
+        topBar = {
+            
+            TopAppBar(title = { Text("User Login") })
+        }
+    ) { paddingValues ->
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 24.dp, vertical = 32.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+
+            TextField(
+                value = "",
+                onValueChange = { },
+                label = { Text("Username") },
+                placeholder = { Text("Enter your unique username") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+                TextField(
+                value = "",
+                onValueChange = { },
+                label = { Text("Password") },
+                placeholder = { Text("Enter your secure password") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(8.dp)) 
+
+            
+            Button(
+                onClick = { },
+                
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+            ) {
+
+                Text("Log In", fontSize = 18.sp)
+            }}}}
+        
+
+@Composable
+fun YourAppTheme(content: @Composable () -> Unit) {
+    MaterialTheme(content = content)
+}
+
+@Preview(name = "Optimized Phone Preview", device = "id:pixel_5")
+@Composable
+fun OptimizedFormPreview() {
+    YourAppTheme {
+        OptimizedLoginForm()
+    }}
